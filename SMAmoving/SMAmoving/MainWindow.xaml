@@ -3,10 +3,10 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:xctk="http://schemas.xceed.com/wpf/xaml/toolkit"
+        xmlns:liveChart ="clr-namespace:LiveCharts.Wpf;assembly=LiveCharts.Wpf"
         xmlns:local="clr-namespace:SMAmoving"
         mc:Ignorable="d"
-        Title="SMA moving" Height="865.951" Width="1160.88" MinWidth="900" MinHeight="600">
+        Title="SMA moving" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600">
     <DockPanel>
         <Grid DockPanel.Dock="Left" Width="359" Background="#FFB2B2B2">
             <Grid.ColumnDefinitions>
@@ -50,8 +50,9 @@
                 <RadioButton Content="High" Margin="50 10"/>
                 <RadioButton Content="Low" Margin="50 10"/>
             </StackPanel>
-
+            <liveChart:CartesianChart Name="cartesianChart1" DockPanel.Dock="Top" Padding="20 5"   Height="287" Width="586"/>
+            <liveChart:CartesianChart Name="cartesianChart2" DockPanel.Dock="Top" Padding="20 5"   Height="263" Width="582"/>
         </DockPanel>
-            
+
     </DockPanel>
 </Window>
