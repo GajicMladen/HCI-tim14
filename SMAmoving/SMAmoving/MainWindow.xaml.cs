@@ -3,13 +3,12 @@ using System.Windows;
 using System.Net;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
+using System.Threading;
 
 namespace SMAmoving
 {
     public partial class MainWindow : Window
-    {        
-        public static List<StockData> MyStocks = new List<StockData>();
-
+    {
         public MainWindow()
         {
             InitializeComponent();
@@ -36,30 +35,65 @@ namespace SMAmoving
             cartesianChart1.Series.Clear();
             cartesianChart1.Series.Add(series1);
             cartesianChart1.Series.Add(series2);
-            //====================TEST dijagram 1================================
+            //=========================================================
 
+            symbol_cmbx.Items.Add("IMB (United States)");
+            symbol_cmbx.Items.Add("Tesco PLC (UK - London Stock Exchange)");
+            symbol_cmbx.Items.Add("Shopify Inc (Canada - Toronto Stock Exchange)");
 
-            //================= API ===============
-            string QUERY_URL = "https://www.alphavantage.co/query?function=TIME_SERIES_DAILY&symbol=IBM&apikey=demo";
-            Uri queryUri = new Uri(QUERY_URL);
+            interval_cmbx.Items.Add("1min");
+            interval_cmbx.Items.Add("5min");
+            interval_cmbx.Items.Add("15min");
+            interval_cmbx.Items.Add("30min");
+            interval_cmbx.Items.Add("60min");
+            interval_cmbx.Items.Add("daily");
+            interval_cmbx.Items.Add("weekly");
+            interval_cmbx.Items.Add("monthly");
+
+            //================= API for SMA ===============
+            Thread t = new Thread(getAndDisplayData);
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+
+        }
+
+        private void getAndDisplayData() {
+
+            startLoadingAnimation();
+
+            //dodati jos neophodnih parametara
+            List<SMAdata> SMAdata = getSMAdataFromAPI("IBM", "1min");
             
+            displaySMAdataInLineChart(SMAdata);
+
+            stopLoadingAnimation();
+            
+        }
+
+        /// <summary>
+        /// Funkcija koja vraca listu SMA objekata sa API-ja u zavisnosti od prosledjenih parametara 
+        /// </summary>
+        /// TODO : dodati sve neophodne parametre i dinamicki kreirati QUERY_URL
+        private List<SMAdata> getSMAdataFromAPI(string symbol, string interval)
+        {
+            string QUERY_URL = "https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=DEC66JZYOJHHO5PC";
+            Uri queryUri = new Uri(QUERY_URL);
             using (WebClient client = new WebClient())
             {
                 JavaScriptSerializer js = new JavaScriptSerializer();
                 dynamic json_data = js.Deserialize(client.DownloadString(queryUri), typeof(object));
-                convertJsonToStockData(json_data);
-               
+                return convertJsonToSMAdata(json_data);
             }
-
         }
 
         /// <summary>
-        /// Funkcija koja popunjava staticku listu MyStocks sa prosledjenim JSON stringom 
+        /// Funkcija koja vraca listu SMA objekata od prosledjenog JSON stringa 
         /// </summary>
-        private static void convertJsonToStockData(dynamic json_data) {
+        private List<SMAdata> convertJsonToSMAdata(dynamic json_data)
+        {
+            List<SMAdata> MySMAs = new List<SMAdata>();
+            MySMAs.Clear();
 
-            MyStocks.Clear();
-            
             int i = 0;
             foreach (Dictionary<string, object> stocks in json_data.Values)
             {
@@ -71,22 +105,70 @@ namespace SMAmoving
                     {
 
                         Dictionary<string, object> stock = (Dictionary<string, object>)stocks[key];
-                        MyStocks.Add(new StockData
+                        MySMAs.Add(new SMAdata
                         {
-                            name = key,
-                            open = double.Parse(stock["1. open"].ToString().Replace(".", ",")),
-                            high = double.Parse(stock["2. high"].ToString().Replace(".", ",")),
-                            low = double.Parse(stock["3. low"].ToString().Replace(".", ",")),
-                            close = double.Parse(stock["4. close"].ToString().Replace(".", ",")),
-                            volume = double.Parse(stock["5. volume"].ToString().Replace(".", ","))
+                            DateTime = key,
+                            SMAvalue = double.Parse(stock["SMA"].ToString().Replace(".", ","))
                         });
 
                     }
                 }
                 i++;
             }
+
+            return MySMAs;
         }
 
+        private void displaySMAdataInLineChart(List<SMAdata> MySMAs) {
+
+            List<double> valuesForChartSMA = new List<double>();
+            foreach (SMAdata sma in MySMAs)
+            {
+                valuesForChartSMA.Add(sma.SMAvalue);
+            }
+
+            cartesianChart2.Dispatcher.Invoke(() => {
+
+                var seriesSMA = new LiveCharts.Wpf.LineSeries()
+                {
+                    Title = "Group A",
+                    Values = new LiveCharts.ChartValues<double>(valuesForChartSMA),
+                };
+
+
+                cartesianChart2.Series.Clear();
+                cartesianChart2.Series.Add(seriesSMA);
+
+            },System.Windows.Threading.DispatcherPriority.ContextIdle);
+
+        }
+
+        private void startLoadingAnimation()
+        {
+
+            cartesianChart2.Dispatcher.Invoke(()=> {
+                cartesianChart2.Visibility = Visibility.Hidden;
+            });
+            loadingChart2_img.Dispatcher.Invoke(() => {
+                
+                loadingChart2_img.Visibility = Visibility.Visible;
+            });
+
+        }
+
+        private void stopLoadingAnimation()
+        {
+
+            cartesianChart2.Dispatcher.Invoke(() => {
+                cartesianChart2.Visibility = Visibility.Visible;
+            });
+            loadingChart2_img.Dispatcher.Invoke(() => {
+
+                loadingChart2_img.Visibility = Visibility.Hidden;
+            });
+
+        }
+       
         //====================TEST dijagram 1================================
 
         private Random rand = new Random(0);
@@ -99,7 +181,17 @@ namespace SMAmoving
                 values[i] = values[i - 1] + (rand.NextDouble() - .5) * mult;
             return values;
         }
+
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+
+        }
+
+        private void Button_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
         //====================TEST dijagram 1================================
-        
+
     }
 }

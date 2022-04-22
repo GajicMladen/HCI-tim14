@@ -65,3 +65,5 @@ C:\Users\PC\Desktop\fax\VI_semestar\HCI\HCI-tim14\SMAmoving\SMAmoving\bin\Debug\
 C:\Users\PC\Desktop\fax\VI_semestar\HCI\HCI-tim14\SMAmoving\SMAmoving\bin\Debug\LiveCharts.Wpf.pdb
 C:\Users\PC\Desktop\fax\VI_semestar\HCI\HCI-tim14\SMAmoving\SMAmoving\bin\Debug\LiveCharts.Wpf.xml
 C:\Users\PC\Desktop\fax\VI_semestar\HCI\HCI-tim14\SMAmoving\SMAmoving\obj\Debug\SMAmoving.csproj.AssemblyReference.cache
+C:\Users\PC\Desktop\fax\VI_semestar\HCI\HCI-tim14\SMAmoving\SMAmoving\bin\Debug\FontAwesome.WPF.dll
+C:\Users\PC\Desktop\fax\VI_semestar\HCI\HCI-tim14\SMAmoving\SMAmoving\bin\Debug\FontAwesome.WPF.xml
