@@ -7,7 +7,7 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:SMAmoving"
         mc:Ignorable="d"
-        Title="SMA moving" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600">
+        Title="Simple Moving Average" Icon="logoGraph.ico" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600">
     <DockPanel>
         <Grid DockPanel.Dock="Left" Width="359" Background="#FFB2B2B2">
             <Grid.ColumnDefinitions>
@@ -47,6 +47,25 @@
             </GridSplitter>
             <Button Grid.ColumnSpan="2" Content="Prikazi" Grid.Column="1" HorizontalAlignment="Left" Margin="41,42,0,0" Grid.Row="5" VerticalAlignment="Top" Width="174" Height="30" Background="#FFA1D384" Click="Button_Click"/>
             <fa:ImageAwesome x:Name="loadingChart2_img" Icon="Refresh" Spin="True" Height="48" Width="48" Grid.Column="2" Margin="543.4,262.6,-385.8,175.8" Grid.Row="5" />
+            <Label Content="Meta Data" Grid.Column="1" HorizontalAlignment="Left" Margin="83,120,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.538" Grid.ColumnSpan="2" Width="137" FontWeight="Bold" FontSize="14"/>
+            <Label Grid.Row="5" Content="1. Symbol:" Grid.Column="1" HorizontalAlignment="Right" Margin="0,160,0,0" VerticalAlignment="Top" Width="103"/>
+            <Label Content="{Binding Path=Symbol}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,160,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.053,-0.385" Width="102" Height="26" FontWeight="Bold"/>
+            <Label Content="2. Indicator:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,203,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.5,-0.154" Width="103"/>
+            <Label Content="{Binding Path=Indicator}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,203,0,0" Grid.Row="5" VerticalAlignment="Top" Width="185" FontWeight="Bold" Height="26"/>
+            <Label Content="3. Last Refreshed:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,245,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.231" Width="103"/>
+            <Label Content="{Binding Path=LastRefreshed}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,245,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
+            <Label Content="4. Interval: " Grid.Column="1" HorizontalAlignment="Left" Margin="0,287,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
+            <Label Content="{Binding Path=Interval}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,287,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
+            <Label Content="5. Time Period:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,327,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
+            <Label Content="{Binding Path=TimePeriod}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,327,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.447,-0.231" Width="102" FontWeight="Bold" Height="26"/>
+            <Label Content="6. Series Type:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,367,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
+            <Label Content="{Binding Path=SeriesType}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,367,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.579,-0.115" Width="102" FontWeight="Bold" Height="26"/>
+            <Label Content="7. Time Zone:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
+            <Label Content="{Binding Path=TimeZone}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold"/>
+
+
+
+
         </Grid>
         <DockPanel DockPanel.Dock="Right">
             <liveChart:CartesianChart Name="cartesianChart1" DockPanel.Dock="Top" Height="309"   />

@@ -4,13 +4,147 @@ using System.Net;
 using System.Web.Script.Serialization;
 using System.Collections.Generic;
 using System.Threading;
+using System.ComponentModel;
+using System.Runtime.CompilerServices;
 
 namespace SMAmoving
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, INotifyPropertyChanged
     {
+        public event PropertyChangedEventHandler PropertyChanged;
+        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
+
+        private string _symbol = "";
+        public string Symbol
+        {
+            set
+            {
+                if (_symbol != value)
+                {
+                    _symbol = value;
+                    OnPropertyChanged();
+                }
+                
+            }
+            get
+            {
+                return _symbol;
+            }
+        }
+
+        private string _indicator = "";
+        public string Indicator
+        {
+            set
+            {
+                if (_indicator != value)
+                {
+                    _indicator = value;
+                    OnPropertyChanged();
+                }
+            }
+            get
+            {
+                return _indicator;
+            }
+        }
+        
+        private string _lastRefreshed = "";
+        public string LastRefreshed
+        {
+            set
+            {
+                if (_lastRefreshed != value)
+                {
+                    _lastRefreshed = value;
+                    OnPropertyChanged();
+                }
+            }
+            get
+            {
+                return _lastRefreshed;
+            }
+        }
+        
+        private string _interval = "";
+        public string Interval
+        {
+            set
+            {
+                if (_interval != value)
+                {
+                    _interval = value;
+                    OnPropertyChanged();
+                }
+
+            }
+            get
+            {
+                return _interval;
+            }
+        }
+
+        private int _timePeriod = 0;
+
+        public int TimePeriod
+        {
+            set
+            {
+                if (_timePeriod != value)
+                {
+                    _timePeriod = value;
+                    OnPropertyChanged();
+                }
+            }
+            get
+            {
+                return _timePeriod;
+            }
+        }
+
+        private string _seriesType = "";
+        public string SeriesType
+        {
+            set
+            {
+                if (_seriesType != value)
+                {
+                    _seriesType = value;
+                    OnPropertyChanged();
+                }
+
+            }
+            get
+            {
+                return _seriesType;
+            }
+        }
+
+        private string _timeZone = "";
+        public string TimeZone
+        {
+            set
+            {
+                if (_timeZone != value)
+                {
+                    _timeZone = value;
+                    OnPropertyChanged();
+                }
+
+            }
+            get
+            {
+                return _timeZone;
+            }
+        }
+
+
         public MainWindow()
         {
+            DataContext = this;
             InitializeComponent();
 
             //====================TEST dijagram 1=================================
@@ -97,8 +231,41 @@ namespace SMAmoving
             int i = 0;
             foreach (Dictionary<string, object> stocks in json_data.Values)
             {
-                //Prvi (0) deo JSON stringa sadrzi opste informacije o dobavljenim podacima
-                //A drugi (1) deo sadrzi same podatke!  
+                if (i == 0)
+                {
+                    foreach (string key in stocks.Keys)
+                    {
+                        if (key.Contains("Symbol"))
+                        {
+                            Symbol = (string)stocks[key];
+                        }
+                        else if (key.Contains("Indicator"))
+                        {
+                            Indicator = (string)stocks[key];
+                        }
+                        else if (key.Contains("Last Refreshed"))
+                        {
+                            LastRefreshed = (string)stocks[key];
+                        }
+                        else if (key.Contains("Interval"))
+                        {
+                            Interval = (string)stocks[key];
+                        }
+                        else if (key.Contains("Time Period"))
+                        {
+                            TimePeriod = (Int32)stocks[key];
+                        }
+                        else if (key.Contains("Series Type"))
+                        {
+                            SeriesType = (string)stocks[key];
+                        }
+                        else if (key.Contains("Time Zone"))
+                        {
+                            TimeZone = (string)stocks[key];
+                        }
+                    }
+
+                }
                 if (i == 1)
                 {
                     foreach (string key in stocks.Keys)
@@ -172,6 +339,7 @@ namespace SMAmoving
         //====================TEST dijagram 1================================
 
         private Random rand = new Random(0);
+
         private double[] RandomWalk(int points = 5, double start = 100, double mult = 50)
         {
             // return an array of difting random numbers
