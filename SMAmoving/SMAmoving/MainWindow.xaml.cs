@@ -15,9 +15,10 @@ namespace SMAmoving
         private void OnPropertyChanged([CallerMemberName] string propertyName = null)
         {
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+
         }
 
-        private string _symbol = "";
+        private string _symbol = "IBM";
         public string Symbol
         {
             set
@@ -171,8 +172,8 @@ namespace SMAmoving
             cartesianChart1.Series.Add(series2);
             //=========================================================
 
-            symbol_cmbx.Items.Add("IMB (United States)");
-            symbol_cmbx.Items.Add("Tesco PLC (UK - London Stock Exchange)");
+            symbol_cmbx.Items.Add("IBM");
+            symbol_cmbx.Items.Add("TSCO.LON");
             symbol_cmbx.Items.Add("Shopify Inc (Canada - Toronto Stock Exchange)");
 
             interval_cmbx.Items.Add("1min");
@@ -184,11 +185,13 @@ namespace SMAmoving
             interval_cmbx.Items.Add("weekly");
             interval_cmbx.Items.Add("monthly");
 
+            cartesianChart2.DisableAnimations = true;
+            
             //================= API for SMA ===============
             Thread t = new Thread(getAndDisplayData);
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
-
+            
         }
 
         private void getAndDisplayData() {
@@ -196,7 +199,7 @@ namespace SMAmoving
             startLoadingAnimation();
 
             //dodati jos neophodnih parametara
-            List<SMAdata> SMAdata = getSMAdataFromAPI("IBM", "1min");
+            List<SMAdata> SMAdata = getSMAdataFromAPI(Symbol, "1min");
             
             displaySMAdataInLineChart(SMAdata);
 
@@ -210,7 +213,7 @@ namespace SMAmoving
         /// TODO : dodati sve neophodne parametre i dinamicki kreirati QUERY_URL
         private List<SMAdata> getSMAdataFromAPI(string symbol, string interval)
         {
-            string QUERY_URL = "https://www.alphavantage.co/query?function=SMA&symbol=IBM&interval=weekly&time_period=10&series_type=open&apikey=DEC66JZYOJHHO5PC";
+            string QUERY_URL = $"https://www.alphavantage.co/query?function=SMA&symbol={symbol}&interval=weekly&time_period=10&series_type=open&apikey=DEC66JZYOJHHO5PC";
             Uri queryUri = new Uri(QUERY_URL);
             using (WebClient client = new WebClient())
             {
@@ -300,6 +303,7 @@ namespace SMAmoving
                 {
                     Title = "Group A",
                     Values = new LiveCharts.ChartValues<double>(valuesForChartSMA),
+                    PointGeometry = System.Windows.Media.Geometry.Empty
                 };
 
 
@@ -352,10 +356,19 @@ namespace SMAmoving
 
         private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-
+            Symbol = symbol_cmbx.SelectedItem.ToString();
         }
 
         private void Button_Click(object sender, RoutedEventArgs e)
+        {
+            Thread t = new Thread(getAndDisplayData);
+            t.SetApartmentState(ApartmentState.STA);
+            t.Start();
+           
+
+        }
+
+        private void interval_cmbx_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
         }

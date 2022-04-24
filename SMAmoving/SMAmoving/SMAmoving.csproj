@@ -118,8 +118,5 @@
   <ItemGroup>
     <Resource Include="logoGraph.ico" />
   </ItemGroup>
-  <ItemGroup>
-    <Resource Include="SMA_Logo.ico" />
-  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
