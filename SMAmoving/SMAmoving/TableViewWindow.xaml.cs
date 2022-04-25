@@ -39,6 +39,7 @@ namespace SMAmoving
             TimezoneLabel = "Timezone: " + timezone;
             DataContext = this;
             InitializeComponent();
+
             tableView.ItemsSource = MainWindow.SMAdata;
             tableView.MinColumnWidth = 420;
             Console.WriteLine("stop");

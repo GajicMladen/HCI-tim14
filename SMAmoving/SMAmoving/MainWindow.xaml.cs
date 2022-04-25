@@ -286,7 +286,7 @@ namespace SMAmoving
                         {
                             DateTime = key,
                             SMAvalue = double.Parse(stock["SMA"].ToString().Replace(".", ","))
-                        });
+                        }) ; 
 
                     }
                 }
