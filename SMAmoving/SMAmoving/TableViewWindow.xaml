@@ -5,9 +5,16 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SMAmoving"
         mc:Ignorable="d"
-        Title="Table View" Icon="logoGraph.ico" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600">
+        Title="Table View" Icon="logoGraph.ico" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600"  d:DataContext="{d:DesignInstance local:TableViewWindow}">
     <Grid>
         <Button Content = "Close" Background="#FFA1D384" Click = "CloseWindow" Margin="77,601,77,10" />
         <DataGrid Name ="tableView" IsReadOnly="True" Margin="77,158,77,84" Grid.Column="2" Grid.ColumnSpan="2"/>
+        <Label Content="{Binding Path=SymbolLabel}" HorizontalAlignment="Left" Margin="77,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.368,0.308" Width="221"/>
+        <Label Content="{Binding Path=IndicatorLabel}" HorizontalAlignment="Left" Margin="77,63,0,0" VerticalAlignment="Top" Width="221"/>
+        <Label Content="{Binding Path=LastRefreshedLabel}" HorizontalAlignment="Left" Margin="323,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.368,0.308" Width="221"/>
+        <Label Content="{Binding Path=IntervalLabel}" HorizontalAlignment="Left" Margin="574,32,0,0" VerticalAlignment="Top" RenderTransformOrigin="-0.368,0.308" Width="221"/>
+        <Label Content="{Binding Path=TimePeriodLabel}" HorizontalAlignment="Left" Margin="574,63,0,0" VerticalAlignment="Top" Width="221"/>
+        <Label Content="{Binding Path=SeriesTypeLabel}" HorizontalAlignment="Left" Margin="323,63,0,0" VerticalAlignment="Top" Width="221"/>
+        <Label Content="{Binding Path=TimezoneLabel}" HorizontalAlignment="Left" Margin="77,96,0,0" VerticalAlignment="Top" Width="221"/>
     </Grid>
 </Window>

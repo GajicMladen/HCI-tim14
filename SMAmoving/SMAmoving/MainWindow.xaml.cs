@@ -419,7 +419,7 @@ namespace SMAmoving
 
         private void TableView_Click(object sender, RoutedEventArgs e)
         {
-            TableViewWindow tableViewWindow = new TableViewWindow();
+            TableViewWindow tableViewWindow = new TableViewWindow(Symbol, Indicator, LastRefreshed, Interval, SeriesType, TimePeriod.ToString(), TimeZone);
             tableViewWindow.Show();
         }
     }
