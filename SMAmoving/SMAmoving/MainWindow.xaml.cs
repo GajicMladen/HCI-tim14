@@ -6,17 +6,25 @@ using System.Collections.Generic;
 using System.Threading;
 using System.ComponentModel;
 using System.Runtime.CompilerServices;
+using System.Windows.Controls;
+using LiveCharts;
+using LiveCharts.Wpf;
+using LiveCharts.Defaults;
+using System.Linq;
+using System.Windows.Media;
+using System.Data.Linq;
 
 namespace SMAmoving
 {
     public partial class MainWindow : Window, INotifyPropertyChanged
     {
         public event PropertyChangedEventHandler PropertyChanged;
-        private void OnPropertyChanged([CallerMemberName] string propertyName = null)
+        protected virtual void OnPropertyChanged(string propertyName = null)
         {
-            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
-
+            if (PropertyChanged != null) PropertyChanged.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
+
+        public SeriesCollection SeriesCollection { get; set; }
 
         private string _symbol = "IBM";
         public string Symbol
@@ -148,29 +156,13 @@ namespace SMAmoving
             DataContext = this;
             InitializeComponent();
 
-            //====================TEST dijagram 1=================================
-            int pointCount = 200;
-            double[] ys1 = RandomWalk(pointCount);
-            double[] ys2 = RandomWalk(pointCount);
-
-            // create series and populate them with data
-            var series1 = new LiveCharts.Wpf.LineSeries()
-            {
-                Title = "Group A",
-                Values = new LiveCharts.ChartValues<double>(ys1),
-            };
-
-            var series2 = new LiveCharts.Wpf.LineSeries()
-            {
-                Title = "Group B",
-                Values = new LiveCharts.ChartValues<double>(ys2),
-            };
-
-            // display the series in the chart control
-            cartesianChart1.Series.Clear();
-            cartesianChart1.Series.Add(series1);
-            cartesianChart1.Series.Add(series2);
-            //=========================================================
+            cartesianChart1.AxisY.Clear();
+            cartesianChart1.AxisY.Add(
+                new Axis
+                {
+                    MinValue = 0
+                }
+            );
 
             symbol_cmbx.Items.Add("IBM");
             symbol_cmbx.Items.Add("TSCO.LON");
@@ -185,6 +177,7 @@ namespace SMAmoving
             interval_cmbx.Items.Add("weekly");
             interval_cmbx.Items.Add("monthly");
 
+            cartesianChart1.DisableAnimations = true;
             cartesianChart2.DisableAnimations = true;
             
             //================= API for SMA ===============
@@ -200,8 +193,10 @@ namespace SMAmoving
 
             //dodati jos neophodnih parametara
             List<SMAdata> SMAdata = getSMAdataFromAPI(Symbol, "1min");
+            List<StockData> StockData = getOhclFromAPI(Symbol);
             
             displaySMAdataInLineChart(SMAdata);
+            displayStockDataInOhclChart(StockData);
 
             stopLoadingAnimation();
             
@@ -220,6 +215,18 @@ namespace SMAmoving
                 JavaScriptSerializer js = new JavaScriptSerializer();
                 dynamic json_data = js.Deserialize(client.DownloadString(queryUri), typeof(object));
                 return convertJsonToSMAdata(json_data);
+            }
+        }
+
+        private List<StockData> getOhclFromAPI(string symbol)
+        {
+            string QUERY_URL = $"https://www.alphavantage.co/query?function=TIME_SERIES_WEEKLY&symbol={symbol}&apikey=7NHB0CFU57FSN2R2";
+            Uri queryUri = new Uri(QUERY_URL);
+            using (WebClient client = new WebClient())
+            {
+                JavaScriptSerializer js = new JavaScriptSerializer();
+                dynamic json_data = js.Deserialize(client.DownloadString(queryUri), typeof(object));
+                return convertJsonToStockData(json_data);
             }
         }
 
@@ -289,6 +296,37 @@ namespace SMAmoving
             return MySMAs;
         }
 
+        private List<StockData> convertJsonToStockData(dynamic json_data)
+        {
+            List<StockData> StockData = new List<StockData>();
+
+            int i = 0;
+            foreach (Dictionary<string, object> stocks in json_data.Values)
+            {
+                if (i == 1)
+                {
+                    foreach (string key in stocks.Keys)
+                    {
+
+                        Dictionary<string, object> stock = (Dictionary<string, object>)stocks[key];
+                        StockData.Add(new StockData
+                        {
+                            DateTime = key,
+                            Open = double.Parse(stock["1. open"].ToString().Replace(".", ",")),
+                            High = double.Parse(stock["2. high"].ToString().Replace(".", ",")),
+                            Low = double.Parse(stock["3. low"].ToString().Replace(".", ",")),
+                            Close = double.Parse(stock["4. close"].ToString().Replace(".", ",")),
+                            Volume = double.Parse(stock["5. volume"].ToString().Replace(".", ","))
+                        });
+
+                    }
+                }
+                i++;
+            }
+
+            return StockData;
+        }
+
         private void displaySMAdataInLineChart(List<SMAdata> MySMAs) {
 
             List<double> valuesForChartSMA = new List<double>();
@@ -312,6 +350,26 @@ namespace SMAmoving
 
             },System.Windows.Threading.DispatcherPriority.ContextIdle);
 
+        }
+
+        private void displayStockDataInOhclChart(List<StockData> stockData)
+        {
+            List<OhlcPoint> ohclPoints = new List<OhlcPoint>();
+            foreach (StockData stock in stockData)
+            {
+                ohclPoints.Add(new OhlcPoint(stock.Open, stock.High, stock.Low, stock.Close));
+            }
+            cartesianChart1.Dispatcher.Invoke(() =>
+            {
+                SeriesCollection = new SeriesCollection
+                {
+                    new OhlcSeries()
+                    {
+                        Values = new ChartValues<OhlcPoint>(ohclPoints)
+                    },
+                };
+                OnPropertyChanged("SeriesCollection");
+            }, System.Windows.Threading.DispatcherPriority.ContextIdle);
         }
 
         private void startLoadingAnimation()
@@ -339,20 +397,6 @@ namespace SMAmoving
             });
 
         }
-       
-        //====================TEST dijagram 1================================
-
-        private Random rand = new Random(0);
-
-        private double[] RandomWalk(int points = 5, double start = 100, double mult = 50)
-        {
-            // return an array of difting random numbers
-            double[] values = new double[points];
-            values[0] = start;
-            for (int i = 1; i < points; i++)
-                values[i] = values[i - 1] + (rand.NextDouble() - .5) * mult;
-            return values;
-        }
 
         private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
@@ -372,7 +416,6 @@ namespace SMAmoving
         {
 
         }
-        //====================TEST dijagram 1================================
 
     }
 }
