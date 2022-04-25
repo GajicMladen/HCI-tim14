@@ -63,14 +63,7 @@
             <Label Content="{Binding Path=SeriesType}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,367,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.579,-0.115" Width="102" FontWeight="Bold" Height="26"/>
             <Label Content="7. Time Zone:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
             <Label Content="{Binding Path=TimeZone}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold"/>
-<<<<<<< HEAD
             <Button Content="Table View" Click="TableView_Click" Background="#FFA1D384" Grid.Column="1" HorizontalAlignment="Left" Margin="41,439,0,0" Grid.Row="5" VerticalAlignment="Top" Width="174" Height="30" Grid.ColumnSpan="2"/>
-
-
-
-
-=======
->>>>>>> 6ff99c17a9987ddbf14b2123611d2876b4a50313
         </Grid>
         <DockPanel DockPanel.Dock="Right">
             <liveChart:CartesianChart Name="cartesianChart1" DockPanel.Dock="Top" Height="300" Series="{Binding SeriesCollection}">

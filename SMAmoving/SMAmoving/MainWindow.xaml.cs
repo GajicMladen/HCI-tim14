@@ -12,7 +12,7 @@ using LiveCharts.Wpf;
 using LiveCharts.Defaults;
 using System.Linq;
 using System.Windows.Media;
-using System.Data.Linq;
+//using System.Data.Linq;
 
 namespace SMAmoving
 {
@@ -416,6 +416,12 @@ namespace SMAmoving
         {
 
 
+        }
 
+        private void TableView_Click(object sender, RoutedEventArgs e)
+        {
+            TableViewWindow tableViewWindow = new TableViewWindow();
+            tableViewWindow.Show();
+        }
     }
 }
