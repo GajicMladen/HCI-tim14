@@ -176,7 +176,10 @@ namespace SMAmoving
 
             symbol_cmbx.Items.Add("IBM");
             symbol_cmbx.Items.Add("TSCO.LON");
-            symbol_cmbx.Items.Add("Shopify Inc (Canada - Toronto Stock Exchange)");
+            symbol_cmbx.Items.Add("SHOP.TRT");
+            symbol_cmbx.Items.Add("GPV.TRV");
+            symbol_cmbx.Items.Add("DAI.DEX");
+            symbol_cmbx.Items.Add("RELIANCE.BSE");
 
             interval_cmbx.Items.Add("1min");
             interval_cmbx.Items.Add("5min");
