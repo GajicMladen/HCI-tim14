@@ -7,7 +7,8 @@
         xmlns:fa="http://schemas.fontawesome.io/icons/"
         xmlns:local="clr-namespace:SMAmoving"
         mc:Ignorable="d"
-        Title="Simple Moving Average" Icon="logoGraph.ico" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600">
+        Title="Simple Moving Average" Icon="logoGraph.ico" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600"
+        d:DataContext="{d:DesignInstance local:MainWindow}">
     <DockPanel>
         <Grid DockPanel.Dock="Left" Width="359" Background="#FFB2B2B2">
             <Grid.ColumnDefinitions>
@@ -62,14 +63,19 @@
             <Label Content="{Binding Path=SeriesType}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,367,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.579,-0.115" Width="102" FontWeight="Bold" Height="26"/>
             <Label Content="7. Time Zone:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
             <Label Content="{Binding Path=TimeZone}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold"/>
+<<<<<<< HEAD
             <Button Content="Table View" Click="TableView_Click" Background="#FFA1D384" Grid.Column="1" HorizontalAlignment="Left" Margin="41,439,0,0" Grid.Row="5" VerticalAlignment="Top" Width="174" Height="30" Grid.ColumnSpan="2"/>
 
 
 
 
+=======
+>>>>>>> 6ff99c17a9987ddbf14b2123611d2876b4a50313
         </Grid>
         <DockPanel DockPanel.Dock="Right">
-            <liveChart:CartesianChart Name="cartesianChart1" DockPanel.Dock="Top" Height="309"   />
+            <liveChart:CartesianChart Name="cartesianChart1" DockPanel.Dock="Top" Height="300" Series="{Binding SeriesCollection}">
+                
+            </liveChart:CartesianChart>
             <liveChart:CartesianChart Name="cartesianChart2" DockPanel.Dock="Top"  />
 
         </DockPanel>
