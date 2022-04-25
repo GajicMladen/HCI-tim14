@@ -79,7 +79,7 @@
                 <Label Content="Fetch data from:" Width="139" FontWeight="Bold"></Label>
                 <RadioButton Content="All available" IsChecked="True" Width="166" Margin="0,7,0,0" Checked="RadioButton_Checked" />
                 <RadioButton Content="1 year" Width="180" Margin="0,7,0,0" Checked="RadioButton_Checked" />
-                <RadioButton Content="2 year" Width="127" Margin="0,7,0,0" Checked="RadioButton_Checked" />
+                <RadioButton Content="2 years" Width="127" Margin="0,7,0,0" Checked="RadioButton_Checked" />
             </StackPanel>
         </DockPanel>
 

@@ -25,6 +25,24 @@ namespace SMAmoving
         }
 
         public SeriesCollection SeriesCollection { get; set; }
+        public static List<SMAdata> SMAdata { get; set; }
+        public static List<StockData> StockData { get; set; }
+
+        private string _dataPeriod;
+        public string DataPeriod
+        {
+            set
+            {
+                if (_dataPeriod != value)
+                {
+                    _dataPeriod = value;
+                }
+            }
+            get
+            {
+                return _dataPeriod;
+            }
+        }
 
         private string _symbol = "";
         public string Symbol
@@ -35,7 +53,7 @@ namespace SMAmoving
                 {
                     _symbol = value;
                 }
-                
+
             }
             get
             {
@@ -58,7 +76,7 @@ namespace SMAmoving
                 return _indicator;
             }
         }
-        
+
         private string _lastRefreshed = "";
         public string LastRefreshed
         {
@@ -74,7 +92,7 @@ namespace SMAmoving
                 return _lastRefreshed;
             }
         }
-        
+
         private string _interval = "";
         public string Interval
         {
@@ -143,7 +161,6 @@ namespace SMAmoving
             }
         }
 
-        public static List<SMAdata> SMAdata { get; set; }
         public MainWindow()
         {
             DataContext = this;
@@ -173,27 +190,30 @@ namespace SMAmoving
 
             cartesianChart1.DisableAnimations = true;
             cartesianChart2.DisableAnimations = true;
-            
+
             //================= API for SMA ===============
             Thread t = new Thread(getAndDisplayData);
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
         }
 
-        private void getAndDisplayData() {
+        private void getAndDisplayData()
+        {
 
             startLoadingAnimation();
 
             //dodati jos neophodnih parametara
             SMAdata = getSMAdataFromAPI(Symbol, Interval, TimePeriod.ToString(), SeriesType);
-            List<StockData> StockData = getOhclFromAPI(Symbol);
+            StockData = getOhclFromAPI(Symbol);
+
+            FilterData(SMAdata, StockData);
 
             displayMetaData();
             displaySMAdataInLineChart(SMAdata);
             displayStockDataInOhclChart(StockData);
 
             stopLoadingAnimation();
-            
+
         }
 
         /// <summary>
@@ -280,7 +300,7 @@ namespace SMAmoving
                         {
                             DateTime = key,
                             SMAvalue = double.Parse(stock["SMA"].ToString().Replace(".", ","))
-                        }) ; 
+                        });
 
                     }
                 }
@@ -321,7 +341,57 @@ namespace SMAmoving
             return StockData;
         }
 
-        private void displaySMAdataInLineChart(List<SMAdata> MySMAs) {
+        private void FilterData(List<SMAdata> _SMAdata, List<StockData> _stockData)
+        {
+            List<SMAdata> newSMAdata = new List<SMAdata>();
+            List<StockData> newStockData = new List<StockData>();
+
+            if (DataPeriod.Contains("1 year"))
+            {
+                var now = DateTime.Now.AddYears(-1);
+                foreach (SMAdata sma in _SMAdata)
+                {
+                    if (DateTime.Compare(now, DateTime.Parse(sma.DateTime)) < 0)
+                    {
+                        newSMAdata.Add(sma);
+                    }
+                }
+                foreach (StockData stock in _stockData)
+                {
+                    if (DateTime.Compare(now, DateTime.Parse(stock.DateTime)) < 0)
+                    {
+                        newStockData.Add(stock);
+                    }
+                }
+                SMAdata = newSMAdata;
+                StockData = newStockData;
+
+
+            }
+            else if (DataPeriod.Contains("2 year"))
+            {
+                var now = DateTime.Now.AddYears(-2);
+                foreach (SMAdata sma in _SMAdata)
+                {
+                    if (DateTime.Compare(now, DateTime.Parse(sma.DateTime)) < 0)
+                    {
+                        newSMAdata.Add(sma);
+                    }
+                }
+                foreach (StockData stock in _stockData)
+                {
+                    if (DateTime.Compare(now, DateTime.Parse(stock.DateTime)) < 0)
+                    {
+                        newStockData.Add(stock);
+                    }
+                }
+                SMAdata = newSMAdata;
+                StockData = newStockData;
+            }
+        }
+
+        private void displaySMAdataInLineChart(List<SMAdata> MySMAs)
+        {
 
             List<double> valuesForChartSMA = new List<double>();
             foreach (SMAdata sma in MySMAs)
@@ -342,7 +412,7 @@ namespace SMAmoving
                 cartesianChart2.Series.Clear();
                 cartesianChart2.Series.Add(seriesSMA);
 
-            },System.Windows.Threading.DispatcherPriority.ContextIdle);
+            }, System.Windows.Threading.DispatcherPriority.ContextIdle);
 
         }
 
@@ -368,14 +438,6 @@ namespace SMAmoving
 
         private void displayMetaData()
         {
-            /*
-            md_symbol.Content = Symbol;
-            md_indicator.Content = Indicator;
-            md_last_refreshed.Content = LastRefreshed;
-            md_interval.Content = Interval;
-            md_time_period.Content = TimePeriod;
-            md_series_type.Content = SeriesType;
-            md_time_zone.Content = TimeZone;*/
             OnPropertyChanged("Symbol");
             OnPropertyChanged("Indicator");
             OnPropertyChanged("LastRefreshed");
@@ -388,11 +450,11 @@ namespace SMAmoving
         private void startLoadingAnimation()
         {
 
-            cartesianChart2.Dispatcher.Invoke(()=> {
+            cartesianChart2.Dispatcher.Invoke(() => {
                 cartesianChart2.Visibility = Visibility.Hidden;
             });
             loadingChart2_img.Dispatcher.Invoke(() => {
-                
+
                 loadingChart2_img.Visibility = Visibility.Visible;
             });
 
@@ -416,7 +478,7 @@ namespace SMAmoving
             Thread t = new Thread(getAndDisplayData);
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
-           
+
 
         }
 
@@ -456,7 +518,9 @@ namespace SMAmoving
 
         private void RadioButton_Checked(object sender, RoutedEventArgs e)
         {
+            var RadioButton = (RadioButton)sender;
 
+            DataPeriod = RadioButton.Content.ToString();
         }
     }
 }
