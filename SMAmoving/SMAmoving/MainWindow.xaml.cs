@@ -142,7 +142,7 @@ namespace SMAmoving
             }
         }
 
-
+        public static List<SMAdata> SMAdata { get; set; }
         public MainWindow()
         {
             DataContext = this;
@@ -199,7 +199,7 @@ namespace SMAmoving
             startLoadingAnimation();
 
             //dodati jos neophodnih parametara
-            List<SMAdata> SMAdata = getSMAdataFromAPI(Symbol, "1min");
+            SMAdata = getSMAdataFromAPI(Symbol, "1min");
             
             displaySMAdataInLineChart(SMAdata);
 
@@ -211,7 +211,7 @@ namespace SMAmoving
         /// Funkcija koja vraca listu SMA objekata sa API-ja u zavisnosti od prosledjenih parametara 
         /// </summary>
         /// TODO : dodati sve neophodne parametre i dinamicki kreirati QUERY_URL
-        private List<SMAdata> getSMAdataFromAPI(string symbol, string interval)
+        public List<SMAdata> getSMAdataFromAPI(string symbol, string interval)
         {
             string QUERY_URL = $"https://www.alphavantage.co/query?function=SMA&symbol={symbol}&interval=weekly&time_period=10&series_type=open&apikey=DEC66JZYOJHHO5PC";
             Uri queryUri = new Uri(QUERY_URL);
@@ -371,6 +371,12 @@ namespace SMAmoving
         private void interval_cmbx_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
 
+        }
+
+        private void TableView_Click(object sender, RoutedEventArgs e)
+        {
+            TableViewWindow tableViewWindow = new TableViewWindow();
+            tableViewWindow.Show();
         }
         //====================TEST dijagram 1================================
 

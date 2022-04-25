@@ -1,0 +1,13 @@
+﻿<Window x:Class="SMAmoving.TableViewWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SMAmoving"
+        mc:Ignorable="d"
+        Title="Table View" Icon="logoGraph.ico" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600">
+    <Grid>
+        <Button Content = "Close" Background="#FFA1D384" Click = "CloseWindow" Margin="77,601,77,10" />
+        <DataGrid Name ="tableView" IsReadOnly="True" Margin="77,158,77,84"/>
+    </Grid>
+</Window>
