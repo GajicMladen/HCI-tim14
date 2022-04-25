@@ -17,70 +17,101 @@
                 <ColumnDefinition Width="2*"></ColumnDefinition>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
-                <RowDefinition Height="32*"></RowDefinition>
-                <RowDefinition Height="45*"></RowDefinition>
-                <RowDefinition Height="51*"></RowDefinition>
-                <RowDefinition Height="52*"></RowDefinition>
-                <RowDefinition Height="44*"></RowDefinition>
-                <RowDefinition Height="611*"></RowDefinition>
+                <RowDefinition Height="26*"></RowDefinition>
+                <RowDefinition Height="36*"></RowDefinition>
+                <RowDefinition Height="41*"></RowDefinition>
+                <RowDefinition Height="28*"></RowDefinition>
+                <RowDefinition Height="38*"></RowDefinition>
+                <RowDefinition Height="72*"></RowDefinition>
+                <RowDefinition Height="5*"/>
+                <RowDefinition Height="47*"/>
+                <RowDefinition Height="38*"/>
+                <RowDefinition Height="36*"/>
+                <RowDefinition Height="42*"/>
+                <RowDefinition Height="37*"/>
+                <RowDefinition Height="40*"/>
+                <RowDefinition Height="41*"/>
+                <RowDefinition Height="46*"/>
+                <RowDefinition Height="30*"/>
+                <RowDefinition Height="62*"/>
             </Grid.RowDefinitions>
-            <Label VerticalAlignment="Center" Height="26" Margin="51,0.4,205.2,9.6" Grid.ColumnSpan="3" Grid.Row="1" Content="Symbol:"/>
-            <Label Grid.Row="2" VerticalAlignment="Center" Height="26" Margin="51,4.4,205.2,10.4" Grid.ColumnSpan="3">Interval:</Label>
-            <ComboBox x:Name="symbol_cmbx" Grid.Column="2" HorizontalAlignment="Left" Margin="10.4,0.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="26" SelectionChanged="ComboBox_SelectionChanged" SelectedIndex="0"/>
-            <ComboBox x:Name="interval_cmbx" Grid.Column="2" HorizontalAlignment="Left" Margin="10.4,4.4,0,0" Grid.Row="2" VerticalAlignment="Top" Width="158" Height="26" SelectedIndex="0" SelectionChanged="interval_cmbx_SelectionChanged"/>
-            <StackPanel VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Center" Background="#FFB2B2B2" Margin="0,10,4,0" Grid.Row="3" Height="25" Width="201" Grid.Column="2" >
+            <Label VerticalAlignment="Center" Height="26" Grid.Row="1" Content="Symbol:" Grid.ColumnSpan="3" Margin="51,5.6,205.2,4.4"/>
+            <Label Grid.Row="2" VerticalAlignment="Center" Height="26" Grid.ColumnSpan="3" Margin="51,7.6,205.2,7.2" >Interval:</Label>
+            <ComboBox x:Name="symbol_cmbx" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="1" VerticalAlignment="Center" Width="158" Height="26" SelectionChanged="ComboBox_SelectionChanged" SelectedIndex="0" Margin="23.4,5.6,24.2,4.4"/>
+            <ComboBox x:Name="interval_cmbx" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="2" VerticalAlignment="Center" Width="158" Height="26" SelectedIndex="0" SelectionChanged="interval_cmbx_SelectionChanged" Margin="23.4,7.6,24.2,7.2"/>
+            <StackPanel VerticalAlignment="Center" Orientation="Horizontal" HorizontalAlignment="Center" Background="#FFB2B2B2"  Grid.Row="3" Height="16" Width="195" Grid.Column="2"  >
+
                 <RadioButton Content="Open" IsChecked="True" Width="56" Checked="SeriesTypeRadioButton_Checked"/>
-                <RadioButton Content="Close" Width="51" Checked="SeriesTypeRadioButton_Checked" />
-                <RadioButton Content="High" Width="48" Checked="SeriesTypeRadioButton_Checked" />
+
+                <RadioButton Content="Close" Checked="SeriesTypeRadioButton_Checked"  />
+                <RadioButton Content="High" Checked="SeriesTypeRadioButton_Checked"/>
                 <RadioButton Content="Low" Width="52" Checked="SeriesTypeRadioButton_Checked" />
             </StackPanel>
-            <Label Content="Time Period:" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="-0.105,0" Width="103" Height="35"/>
-            <TextBox x:Name="time_period_tb" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="10,4,0,0" Grid.Row="4" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="158" TextChanged="time_period_tb_TextChanged" />
-            <Label Grid.Row="3" VerticalAlignment="Center" Height="26" Margin="51,5.6,205.2,9.801" Grid.ColumnSpan="3" Content="Series type:"/>
-            <GridSplitter Grid.Column="2" HorizontalAlignment="Left" Height="296" Margin="24,38,0,0" Grid.Row="3" VerticalAlignment="Top" Width="4" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3" Background="#FF463535">
-                <GridSplitter.RenderTransform>
-                    <TransformGroup>
-                        <ScaleTransform/>
-                        <SkewTransform/>
-                        <RotateTransform Angle="90
-                                         "/>
-                        <TranslateTransform/>
-                    </TransformGroup>
-                </GridSplitter.RenderTransform>
-            </GridSplitter>
+            <Label Content="Time Period:" Grid.Row="4" VerticalAlignment="Center" Height="25" Grid.ColumnSpan="3" Margin="51,6.8,205.2,6.6"  />
+            <TextBox x:Name="time_period_tb"  PreviewTextInput="NumberValidationTextBox" Grid.Column="2" HorizontalAlignment="Center" Height="24" Grid.Row="4" TextWrapping="Wrap" Text="10" VerticalAlignment="Center" Width="158" TextChanged="time_period_tb_TextChanged" Margin="23.4,3.8,24.2,10.6" UndoLimit="98" />
+            <Label Grid.Row="3" VerticalAlignment="Center" Height="26" Content="Series type:" Grid.ColumnSpan="3" Margin="51,0.8,205.2,1.2" />
+            <Label Content="Fetch data from:"  Grid.Row="5" Grid.ColumnSpan="3" Margin="51,22.4,205.2,24.6" VerticalAlignment="Center" Height="25" />
+            <StackPanel Height="57" VerticalAlignment="Center" Orientation="Vertical" HorizontalAlignment="Center" Width="163"  Grid.Row="5" Grid.Column="2"  >
 
-            <Button Grid.ColumnSpan="2" Content="Show" Grid.Column="1" HorizontalAlignment="Left" Margin="41,42,0,0" Grid.Row="5" VerticalAlignment="Top" Width="174" Height="30" Background="#FFA1D384" Click="Button_Click"/>
-                <fa:ImageAwesome x:Name="loadingChart2_img" Icon="Refresh" Spin="True" Height="48" Width="48" Grid.Column="2" Margin="543.4,262.6,-385.8,175.8" Grid.Row="5" />
-                <Label Content="Meta Data" Grid.Column="1" HorizontalAlignment="Left" Margin="83,120,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.538" Grid.ColumnSpan="2" Width="137" FontWeight="Bold" FontSize="14"/>
-            <Label Grid.Row="5" Content="1. Symbol:" Grid.Column="1" HorizontalAlignment="Right" Margin="0,160,0,0" VerticalAlignment="Top" Width="103"/>
-            <Label x:Name="md_symbol" Content="{Binding Path=Symbol}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,160,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.053,-0.385" Width="102" Height="26" FontWeight="Bold"/>
-            <Label Content="2. Indicator:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,203,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.5,-0.154" Width="103"/>
-            <Label x:Name="md_indicator" Content="{Binding Path=Indicator}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,203,0,0" Grid.Row="5" VerticalAlignment="Top" Width="185" FontWeight="Bold" Height="26"/>
-            <Label Content="3. Last Refreshed:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,245,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.231" Width="103"/>
-            <Label x:Name="md_last_refreshed" Content="{Binding Path=LastRefreshed}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,245,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
-            <Label Content="4. Interval: " Grid.Column="1" HorizontalAlignment="Left" Margin="0,287,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label x:Name="md_interval" Content="{Binding Path=Interval}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,287,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
-            <Label Content="5. Time Period:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,327,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label x:Name="md_time_period" Content="{Binding Path=TimePeriod}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,327,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.447,-0.231" Width="102" FontWeight="Bold" Height="26"/>
-            <Label Content="6. Series Type:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,367,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label x:Name="md_series_type" Content="{Binding Path=SeriesType}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,367,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.579,-0.115" Width="102" FontWeight="Bold" Height="26"/>
-            <Label Content="7. Time Zone:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label x:Name="md_time_zone" Content="{Binding Path=TimeZone}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold"/>
+                <RadioButton Content="All available" IsChecked="True"  Checked="RadioButton_Checked" Margin="0,0,0.2,0" />
+                <RadioButton Content="1 year"  Checked="RadioButton_Checked" Margin="0,0,0.2,0" />
+                <RadioButton Content="2 years" Checked="RadioButton_Checked" Margin="0,0,0.2,0" Height="16" />
+            </StackPanel>
 
-            <Button Content="Table View" Click="TableView_Click" Background="#FFA1D384" Grid.Column="1" HorizontalAlignment="Left" Margin="41,439,0,0" Grid.Row="5" VerticalAlignment="Top" Width="174" Height="30" Grid.ColumnSpan="2"/>
+            <Button Content="Show" Grid.Column="1" HorizontalAlignment="Left" Margin="40.8,4.4,0,0" Grid.Row="6" VerticalAlignment="Top" Width="174" Height="30" Background="#FFA1D384" Click="Button_Click" Grid.ColumnSpan="2" Grid.RowSpan="2"/>
+            <fa:ImageAwesome x:Name="loadingChart2_img" Icon="Refresh" Spin="True" Grid.Column="2" Margin="557.4,0.6,-440.8,8" Grid.Row="7" Grid.RowSpan="2" />
+            <Label Content="Shown Meta Data" HorizontalAlignment="Left" Margin="17,46.6,0,0" Grid.Row="7" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.538" Grid.ColumnSpan="3" Width="137" FontWeight="Bold" FontSize="14" Height="29" Grid.RowSpan="2"/>
+            <Label Grid.Row="9" Content="1. Symbol:"  VerticalAlignment="Top" Width="103"  Height="26" HorizontalAlignment="Right" Grid.ColumnSpan="3" Margin="0,1,205.2,0"/>
+            <Label x:Name="md_symbol" Content="{Binding Path=Symbol}" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="9" VerticalAlignment="Top" RenderTransformOrigin="0.053,-0.385" Width="102" Height="26" FontWeight="Bold" Margin="51.4,1,52.2,0"/>
+            <Label Content="2. Indicator:" HorizontalAlignment="Left" Grid.Row="10" VerticalAlignment="Top"  Width="103" Grid.ColumnSpan="3" Height="26" Margin="51,1,0,0"/>
+            <Label x:Name="md_indicator" Content="{Binding Path=Indicator}" Grid.Column="2" HorizontalAlignment="Center"  Grid.Row="10" VerticalAlignment="Top" Width="97" FontWeight="Bold" Height="26" Margin="51.4,1,57.2,0" />
+            <Label Content="3. Last Refreshed:" HorizontalAlignment="Left" Grid.Row="11" VerticalAlignment="Top"  Width="103" Grid.ColumnSpan="3" Height="26" Margin="51,0.4,0,0"/>
+            <Label x:Name="md_last_refreshed" Content="{Binding Path=LastRefreshed}" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="11" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26" Margin="51.4,0.4,52.2,0"/>
+            <Label Content="4. Interval: " HorizontalAlignment="Left" Grid.Row="11" VerticalAlignment="Top" Width="103" Grid.ColumnSpan="3" Height="26" Margin="51,33.4,0,0" Grid.RowSpan="2"/>
+            <Label x:Name="md_interval" Content="{Binding Path=Interval}" Grid.Column="2" HorizontalAlignment="Center"  Grid.Row="11" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26" Margin="51.4,33.4,52.2,0" Grid.RowSpan="2"/>
+            <Label Content="5. Time Period:" HorizontalAlignment="Left" Grid.Row="12" VerticalAlignment="Top" Width="103" Grid.ColumnSpan="3" Height="26" Margin="51,36.6,0,0" Grid.RowSpan="2"/>
+            <Label x:Name="md_time_period" Content="{Binding Path=TimePeriod}" Grid.Column="2" HorizontalAlignment="Center" Grid.Row="12" VerticalAlignment="Top" RenderTransformOrigin="0.447,-0.231" Width="102" FontWeight="Bold" Height="26" Margin="51.4,36.6,52.2,0" Grid.RowSpan="2"/>
+            <Label Content="6. Series Type:" HorizontalAlignment="Left" Grid.Row="13" VerticalAlignment="Top" Width="103" Grid.ColumnSpan="3" Height="26" Margin="51,37.6,0,0" Grid.RowSpan="2"/>
+            <Label x:Name="md_series_type" Content="{Binding Path=SeriesType}" Grid.Column="2" HorizontalAlignment="Center"  Grid.Row="13" VerticalAlignment="Top" RenderTransformOrigin="0.579,-0.115" Width="102" FontWeight="Bold" Height="26" Margin="51.4,37.6,52.2,0" Grid.RowSpan="2"/>
+            <Label Content="7. Time Zone:" HorizontalAlignment="Left" Grid.Row="15" VerticalAlignment="Top" Width="103" Grid.ColumnSpan="3" Height="26" Margin="51,0.2,0,0"/>
+            <Label x:Name="md_time_zone" Content="{Binding Path=TimeZone}" Grid.Column="2" HorizontalAlignment="Center"  Grid.Row="15" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26" Margin="51.4,0.2,52.2,0"/>
+
+            <Button Content="Table View" Click="TableView_Click" Background="#FFA1D384" Grid.Column="1" HorizontalAlignment="Left" Margin="40.8,7.8,0,0" Grid.Row="16" VerticalAlignment="Top" Width="174" Height="30" Grid.ColumnSpan="2"/>
+            <Label Content="Get from API:" HorizontalAlignment="Left" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.538" Grid.ColumnSpan="2" Width="137" FontWeight="Bold" FontSize="14" Height="29" Grid.RowSpan="2" Margin="10,0,0,0"/>
 
         </Grid>
-        <DockPanel DockPanel.Dock="Right">
-            <liveChart:CartesianChart Name="cartesianChart1" DockPanel.Dock="Top" Height="300" Series="{Binding SeriesCollection}">
+        <DockPanel DockPanel.Dock="Right" LastChildFill="True">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="0.45*"></RowDefinition>
+                    <RowDefinition Height="0.1*"> </RowDefinition>
+                    <RowDefinition Height="0.45*"></RowDefinition>
+                </Grid.RowDefinitions>
 
-            </liveChart:CartesianChart>
-            <liveChart:CartesianChart Name="cartesianChart2" DockPanel.Dock="Top" Height="329"  />
-            <StackPanel DockPanel.Dock="Bottom" Height="32" VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Width="622">
-                <Label Content="Fetch data from:" Width="139" FontWeight="Bold"></Label>
-                <RadioButton Content="All available" IsChecked="True" Width="166" Margin="0,7,0,0" Checked="RadioButton_Checked" />
-                <RadioButton Content="1 year" Width="180" Margin="0,7,0,0" Checked="RadioButton_Checked" />
-                <RadioButton Content="2 years" Width="127" Margin="0,7,0,0" Checked="RadioButton_Checked" />
-            </StackPanel>
+                <liveChart:CartesianChart Name="cartesianChart1" Grid.Row="0" Grid.Column="0"  Series="{Binding SeriesCollection}" Margin="10,10,10.4,10.2">
+                    <liveChart:CartesianChart.AxisY>
+                        <liveChart:Axis Title="SMA values"></liveChart:Axis>
+                    </liveChart:CartesianChart.AxisY>
+                </liveChart:CartesianChart>
+                <liveChart:CartesianChart Name="cartesianChart2" Grid.Row="2" Grid.Column="0" Margin="0,0.2,10.4,22.8"   >
+                    <liveChart:CartesianChart.AxisY>
+                        <liveChart:Axis Title="SMA values"></liveChart:Axis>
+                    </liveChart:CartesianChart.AxisY>
+                    <liveChart:CartesianChart.AxisX>
+                        <liveChart:Axis LabelsRotation="30" Labels="{Binding xLables}" ShowLabels="True">
+                            <liveChart:Axis.Separator>
+                                <liveChart:Separator Step="100" IsEnabled="True">
+
+                                </liveChart:Separator>
+                            </liveChart:Axis.Separator>
+                        </liveChart:Axis>
+                    </liveChart:CartesianChart.AxisX>
+                </liveChart:CartesianChart>
+                <Label x:Name="errAPI_lbl" Content="Nažalost API ne dozvoljava više od 5 poziva u minutu, niti više od 500 u danu.... :(" HorizontalAlignment="Left" Height="75" Margin="40,332,0,0" Grid.RowSpan="2" VerticalAlignment="Top" Width="620" FontSize="16" FontWeight="Bold" Foreground="Red" Visibility="Hidden"/>
+                <Label x:Name="errtAPI_lbl" Content="API greška!" HorizontalAlignment="Left" Height="75" Margin="282,277,0,0" VerticalAlignment="Top" Width="249" FontSize="22" FontWeight="Bold" Foreground="Red" Grid.RowSpan="2" Visibility="Hidden"/>
+
+            </Grid>
+
         </DockPanel>
 
     </DockPanel>

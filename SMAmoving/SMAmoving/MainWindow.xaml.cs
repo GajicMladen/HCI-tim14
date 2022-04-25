@@ -12,6 +12,9 @@ using LiveCharts.Wpf;
 using LiveCharts.Defaults;
 using System.Linq;
 using System.Windows.Media;
+using Separator = LiveCharts.Wpf.Separator;
+using System.Windows.Input;
+using System.Text.RegularExpressions;
 //using System.Data.Linq;
 
 namespace SMAmoving
@@ -203,19 +206,56 @@ namespace SMAmoving
         private void getAndDisplayData()
         {
 
-            startLoadingAnimation();
-
             //dodati jos neophodnih parametara
-            SMAdata = getSMAdataFromAPI(Symbol, Interval, TimePeriod.ToString(), SeriesType);
-            StockData = getOhclFromAPI(Symbol);
+            try
+            {
+                hideErrAPImsg();
+                startLoadingAnimation();
+                SMAdata = getSMAdataFromAPI(Symbol, Interval, TimePeriod.ToString(), SeriesType);
+                StockData = getOhclFromAPI(Symbol);
+                FilterData(SMAdata, StockData);
 
-            FilterData(SMAdata, StockData);
+                displayMetaData();
+                displaySMAdataInLineChart(SMAdata);
+                displayStockDataInOhclChart(StockData);
 
-            displayMetaData();
-            displaySMAdataInLineChart(SMAdata);
-            displayStockDataInOhclChart(StockData);
+                stopLoadingAnimation();
+            }
+            catch {
+                errAPI();
+            }
+            
+        }
 
-            stopLoadingAnimation();
+        private void hideErrAPImsg() {
+
+            errAPI_lbl.Dispatcher.Invoke(() =>
+            {
+                errAPI_lbl.Visibility = Visibility.Hidden;
+
+            });
+            errtAPI_lbl.Dispatcher.Invoke(() =>
+            {
+                errtAPI_lbl.Visibility = Visibility.Hidden;
+
+            });
+        }
+
+        private void errAPI()
+        {
+            errAPI_lbl.Dispatcher.Invoke(() =>
+            {
+                errAPI_lbl.Visibility = Visibility.Visible;
+
+            });
+            errtAPI_lbl.Dispatcher.Invoke(() =>
+            {
+                errtAPI_lbl.Visibility = Visibility.Visible;
+
+            });
+            loadingChart2_img.Dispatcher.Invoke(()=> {
+                loadingChart2_img.Visibility = Visibility.Hidden;
+            });
 
         }
 
@@ -256,63 +296,78 @@ namespace SMAmoving
             MySMAs.Clear();
 
             int i = 0;
-            foreach (Dictionary<string, object> stocks in json_data.Values)
+            try
             {
-                if (i == 0)
+                foreach (Dictionary<string, object> stocks in json_data.Values)
                 {
-                    foreach (string key in stocks.Keys)
+                    if (i == 0)
                     {
-                        if (key.Contains("Symbol"))
+                        foreach (string key in stocks.Keys)
                         {
-                            Symbol = (string)stocks[key];
+                            if (key.Contains("Symbol"))
+                            {
+                                Symbol = (string)stocks[key];
+                            }
+                            else if (key.Contains("Indicator"))
+                            {
+                                Indicator = (string)stocks[key];
+                            }
+                            else if (key.Contains("Last Refreshed"))
+                            {
+                                LastRefreshed = (string)stocks[key];
+                            }
+                            else if (key.Contains("Interval"))
+                            {
+                                Interval = (string)stocks[key];
+                            }
+                            else if (key.Contains("Time Period"))
+                            {
+                                TimePeriod = (Int32)stocks[key];
+                            }
+                            else if (key.Contains("Series Type"))
+                            {
+                                SeriesType = (string)stocks[key];
+                            }
+                            else if (key.Contains("Time Zone"))
+                            {
+                                TimeZone = (string)stocks[key];
+                            }
                         }
-                        else if (key.Contains("Indicator"))
-                        {
-                            Indicator = (string)stocks[key];
-                        }
-                        else if (key.Contains("Last Refreshed"))
-                        {
-                            LastRefreshed = (string)stocks[key];
-                        }
-                        else if (key.Contains("Interval"))
-                        {
-                            Interval = (string)stocks[key];
-                        }
-                        else if (key.Contains("Time Period"))
-                        {
-                            TimePeriod = (Int32)stocks[key];
-                        }
-                        else if (key.Contains("Series Type"))
-                        {
-                            SeriesType = (string)stocks[key];
-                        }
-                        else if (key.Contains("Time Zone"))
-                        {
-                            TimeZone = (string)stocks[key];
-                        }
-                    }
-
-                }
-                if (i == 1)
-                {
-                    foreach (string key in stocks.Keys)
-                    {
-
-                        Dictionary<string, object> stock = (Dictionary<string, object>)stocks[key];
-                        MySMAs.Add(new SMAdata
-                        {
-                            DateTime = key,
-                            SMAvalue = double.Parse(stock["SMA"].ToString().Replace(".", ","))
-                        });
 
                     }
+                    if (i == 1)
+                    {
+                        foreach (string key in stocks.Keys)
+                        {
+
+                            Dictionary<string, object> stock = (Dictionary<string, object>)stocks[key];
+                            MySMAs.Add(new SMAdata
+                            {
+                                DateTime = key,
+                                SMAvalue = double.Parse(stock["SMA"].ToString().Replace(".", ","))
+                            });
+
+                        }
+                    }
+                    i++;
                 }
-                i++;
             }
-
+            catch {
+                errorFromAPI();
+            }
             return MySMAs;
         }
 
+        private void errorFromAPI() {
+
+
+
+        }
+        private void NumberValidationTextBox(object sender, TextCompositionEventArgs e)
+        {
+            Regex regex = new Regex("[^0-9]+");
+            e.Handled = regex.IsMatch(e.Text);
+        }
         private List<StockData> convertJsonToStockData(dynamic json_data)
         {
             List<StockData> StockData = new List<StockData>();
@@ -392,39 +447,60 @@ namespace SMAmoving
                 StockData = newStockData;
             }
         }
-
         private void displaySMAdataInLineChart(List<SMAdata> MySMAs)
         {
-
+            List<string> labele2 = new List<string>();
             List<double> valuesForChartSMA = new List<double>();
+            
             foreach (SMAdata sma in MySMAs)
             {
                 valuesForChartSMA.Add(sma.SMAvalue);
+                labele2.Add(sma.DateTime);
             }
-
+            
             cartesianChart2.Dispatcher.Invoke(() => {
 
                 var seriesSMA = new LiveCharts.Wpf.LineSeries()
                 {
-                    Title = "Group A",
                     Values = new LiveCharts.ChartValues<double>(valuesForChartSMA),
-                    PointGeometry = System.Windows.Media.Geometry.Empty
+                    PointGeometry = System.Windows.Media.Geometry.Empty,
+                    Title = "SMA value"
+
                 };
+
+                int step = labele2.Count / 5;
+                LiveCharts.Wpf.Axis ax = new LiveCharts.Wpf.Axis()
+                {
+                    Title = "Date time",
+                    FontSize = 10,
+                    Separator = new Separator { Step = step, IsEnabled = false },
+                    LabelsRotation = 18,
+                    ShowLabels = true,
+                    Labels = labele2,
+                };
+
 
 
                 cartesianChart2.Series.Clear();
                 cartesianChart2.Series.Add(seriesSMA);
 
+                cartesianChart2.AxisX.Clear();
+                cartesianChart2.AxisX.Add(ax);
+
             }, System.Windows.Threading.DispatcherPriority.ContextIdle);
 
         }
 
+
         private void displayStockDataInOhclChart(List<StockData> stockData)
         {
             List<OhlcPoint> ohclPoints = new List<OhlcPoint>();
+
+            List<string> labele1 = new List<string>();
             foreach (StockData stock in stockData)
             {
                 ohclPoints.Add(new OhlcPoint(stock.Open, stock.High, stock.Low, stock.Close));
+                labele1.Add(stock.DateTime);
             }
             cartesianChart1.Dispatcher.Invoke(() =>
             {
@@ -435,6 +511,19 @@ namespace SMAmoving
                         Values = new ChartValues<OhlcPoint>(ohclPoints)
                     },
                 };
+                int step = labele1.Count / 5;
+                LiveCharts.Wpf.Axis ax = new LiveCharts.Wpf.Axis()
+                {
+                    Title = "Date time",
+                    FontSize = 10,
+                    Separator = new Separator { Step = step, IsEnabled = false },
+                    LabelsRotation = 18,
+                    ShowLabels = true,
+                    Labels = labele1,
+                };
+                cartesianChart1.AxisX.Clear();
+                cartesianChart1.AxisX.Add(ax);
+
                 OnPropertyChanged("SeriesCollection");
             }, System.Windows.Threading.DispatcherPriority.ContextIdle);
         }
@@ -456,6 +545,10 @@ namespace SMAmoving
             cartesianChart2.Dispatcher.Invoke(() => {
                 cartesianChart2.Visibility = Visibility.Hidden;
             });
+
+            cartesianChart1.Dispatcher.Invoke(() => {
+                cartesianChart1.Visibility = Visibility.Hidden;
+            });
             loadingChart2_img.Dispatcher.Invoke(() => {
 
                 loadingChart2_img.Visibility = Visibility.Visible;
@@ -466,6 +559,9 @@ namespace SMAmoving
         private void stopLoadingAnimation()
         {
 
+            cartesianChart1.Dispatcher.Invoke(() => {
+                cartesianChart1.Visibility = Visibility.Visible;
+            });
             cartesianChart2.Dispatcher.Invoke(() => {
                 cartesianChart2.Visibility = Visibility.Visible;
             });
