@@ -8,6 +8,6 @@
         Title="Table View" Icon="logoGraph.ico" Height="694.751" Width="1036.08" MinWidth="900" MinHeight="600">
     <Grid>
         <Button Content = "Close" Background="#FFA1D384" Click = "CloseWindow" Margin="77,601,77,10" />
-        <DataGrid Name ="tableView" IsReadOnly="True" Margin="77,158,77,84"/>
+        <DataGrid Name ="tableView" IsReadOnly="True" Margin="77,158,77,84" Grid.Column="2" Grid.ColumnSpan="2"/>
     </Grid>
 </Window>

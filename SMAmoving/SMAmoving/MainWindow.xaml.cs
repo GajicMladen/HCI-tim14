@@ -78,7 +78,7 @@ namespace SMAmoving
             }
         }
         
-        private string _interval = "";
+        private string _interval = "weekly";
         public string Interval
         {
             set
@@ -114,7 +114,7 @@ namespace SMAmoving
             }
         }
 
-        private string _seriesType = "";
+        private string _seriesType = "open";
         public string SeriesType
         {
             set
@@ -192,7 +192,7 @@ namespace SMAmoving
             startLoadingAnimation();
 
             //dodati jos neophodnih parametara
-            SMAdata = getSMAdataFromAPI(Symbol, "1min");
+            SMAdata = getSMAdataFromAPI(Symbol, Interval, "10", SeriesType);
             List<StockData> StockData = getOhclFromAPI(Symbol);
 
             displaySMAdataInLineChart(SMAdata);
@@ -206,9 +206,9 @@ namespace SMAmoving
         /// Funkcija koja vraca listu SMA objekata sa API-ja u zavisnosti od prosledjenih parametara 
         /// </summary>
         /// TODO : dodati sve neophodne parametre i dinamicki kreirati QUERY_URL
-        public List<SMAdata> getSMAdataFromAPI(string symbol, string interval)
+        public List<SMAdata> getSMAdataFromAPI(string symbol, string interval, string timePeriod, string series_type)
         {
-            string QUERY_URL = $"https://www.alphavantage.co/query?function=SMA&symbol={symbol}&interval=weekly&time_period=10&series_type=open&apikey=DEC66JZYOJHHO5PC";
+            string QUERY_URL = $"https://www.alphavantage.co/query?function=SMA&symbol={symbol}&interval=weekly&time_period={timePeriod}&series_type=open&apikey=DEC66JZYOJHHO5PC";
             Uri queryUri = new Uri(QUERY_URL);
             using (WebClient client = new WebClient())
             {
@@ -398,11 +398,6 @@ namespace SMAmoving
 
         }
 
-        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
-        {
-            Symbol = symbol_cmbx.SelectedItem.ToString();
-        }
-
         private void Button_Click(object sender, RoutedEventArgs e)
         {
             Thread t = new Thread(getAndDisplayData);
@@ -412,10 +407,14 @@ namespace SMAmoving
 
         }
 
+        private void ComboBox_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
+        {
+            Symbol = symbol_cmbx.SelectedItem.ToString();
+        }
+
         private void interval_cmbx_SelectionChanged(object sender, System.Windows.Controls.SelectionChangedEventArgs e)
         {
-
-
+            Interval = interval_cmbx.SelectedItem.ToString();
         }
 
         private void TableView_Click(object sender, RoutedEventArgs e)
@@ -425,3 +424,4 @@ namespace SMAmoving
         }
     }
 }
+
