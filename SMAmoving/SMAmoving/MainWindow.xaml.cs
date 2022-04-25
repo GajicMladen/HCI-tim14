@@ -26,7 +26,7 @@ namespace SMAmoving
 
         public SeriesCollection SeriesCollection { get; set; }
 
-        private string _symbol = "IBM";
+        private string _symbol = "";
         public string Symbol
         {
             set
@@ -34,7 +34,6 @@ namespace SMAmoving
                 if (_symbol != value)
                 {
                     _symbol = value;
-                    OnPropertyChanged();
                 }
                 
             }
@@ -52,7 +51,6 @@ namespace SMAmoving
                 if (_indicator != value)
                 {
                     _indicator = value;
-                    OnPropertyChanged();
                 }
             }
             get
@@ -69,7 +67,6 @@ namespace SMAmoving
                 if (_lastRefreshed != value)
                 {
                     _lastRefreshed = value;
-                    OnPropertyChanged();
                 }
             }
             get
@@ -78,7 +75,7 @@ namespace SMAmoving
             }
         }
         
-        private string _interval = "weekly";
+        private string _interval = "";
         public string Interval
         {
             set
@@ -86,7 +83,6 @@ namespace SMAmoving
                 if (_interval != value)
                 {
                     _interval = value;
-                    OnPropertyChanged();
                 }
 
             }
@@ -96,7 +92,7 @@ namespace SMAmoving
             }
         }
 
-        private int _timePeriod = 0;
+        private int _timePeriod = 10;
 
         public int TimePeriod
         {
@@ -105,7 +101,6 @@ namespace SMAmoving
                 if (_timePeriod != value)
                 {
                     _timePeriod = value;
-                    OnPropertyChanged();
                 }
             }
             get
@@ -114,7 +109,7 @@ namespace SMAmoving
             }
         }
 
-        private string _seriesType = "open";
+        private string _seriesType = "";
         public string SeriesType
         {
             set
@@ -122,7 +117,6 @@ namespace SMAmoving
                 if (_seriesType != value)
                 {
                     _seriesType = value;
-                    OnPropertyChanged();
                 }
 
             }
@@ -140,7 +134,6 @@ namespace SMAmoving
                 if (_timeZone != value)
                 {
                     _timeZone = value;
-                    OnPropertyChanged();
                 }
 
             }
@@ -176,6 +169,7 @@ namespace SMAmoving
             interval_cmbx.Items.Add("daily");
             interval_cmbx.Items.Add("weekly");
             interval_cmbx.Items.Add("monthly");
+            interval_cmbx.SelectedIndex = 6;
 
             cartesianChart1.DisableAnimations = true;
             cartesianChart2.DisableAnimations = true;
@@ -184,7 +178,6 @@ namespace SMAmoving
             Thread t = new Thread(getAndDisplayData);
             t.SetApartmentState(ApartmentState.STA);
             t.Start();
-            
         }
 
         private void getAndDisplayData() {
@@ -192,9 +185,10 @@ namespace SMAmoving
             startLoadingAnimation();
 
             //dodati jos neophodnih parametara
-            SMAdata = getSMAdataFromAPI(Symbol, Interval, "10", SeriesType);
+            SMAdata = getSMAdataFromAPI(Symbol, Interval, TimePeriod.ToString(), SeriesType);
             List<StockData> StockData = getOhclFromAPI(Symbol);
 
+            displayMetaData();
             displaySMAdataInLineChart(SMAdata);
             displayStockDataInOhclChart(StockData);
 
@@ -208,7 +202,7 @@ namespace SMAmoving
         /// TODO : dodati sve neophodne parametre i dinamicki kreirati QUERY_URL
         public List<SMAdata> getSMAdataFromAPI(string symbol, string interval, string timePeriod, string series_type)
         {
-            string QUERY_URL = $"https://www.alphavantage.co/query?function=SMA&symbol={symbol}&interval=weekly&time_period={timePeriod}&series_type=open&apikey=DEC66JZYOJHHO5PC";
+            string QUERY_URL = $"https://www.alphavantage.co/query?function=SMA&symbol={symbol}&interval={interval}&time_period={timePeriod}&series_type={series_type}&apikey=DEC66JZYOJHHO5PC";
             Uri queryUri = new Uri(QUERY_URL);
             using (WebClient client = new WebClient())
             {
@@ -372,6 +366,25 @@ namespace SMAmoving
             }, System.Windows.Threading.DispatcherPriority.ContextIdle);
         }
 
+        private void displayMetaData()
+        {
+            /*
+            md_symbol.Content = Symbol;
+            md_indicator.Content = Indicator;
+            md_last_refreshed.Content = LastRefreshed;
+            md_interval.Content = Interval;
+            md_time_period.Content = TimePeriod;
+            md_series_type.Content = SeriesType;
+            md_time_zone.Content = TimeZone;*/
+            OnPropertyChanged("Symbol");
+            OnPropertyChanged("Indicator");
+            OnPropertyChanged("LastRefreshed");
+            OnPropertyChanged("Interval");
+            OnPropertyChanged("TimePeriod");
+            OnPropertyChanged("SeriesType");
+            OnPropertyChanged("TimeZone");
+        }
+
         private void startLoadingAnimation()
         {
 
@@ -421,6 +434,29 @@ namespace SMAmoving
         {
             TableViewWindow tableViewWindow = new TableViewWindow(Symbol, Indicator, LastRefreshed, Interval, SeriesType, TimePeriod.ToString(), TimeZone);
             tableViewWindow.Show();
+        }
+
+        private void SeriesTypeRadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+            var RadioButton = (RadioButton)sender;
+
+            SeriesType = RadioButton.Content.ToString();
+        }
+
+        private void time_period_tb_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            int value;
+            bool correct = int.TryParse(time_period_tb.Text.ToString(), out value);
+
+            if (correct)
+            {
+                TimePeriod = value;
+            }
+        }
+
+        private void RadioButton_Checked(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

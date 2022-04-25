@@ -29,13 +29,13 @@
             <ComboBox x:Name="symbol_cmbx" Grid.Column="2" HorizontalAlignment="Left" Margin="10.4,0.4,0,0" Grid.Row="1" VerticalAlignment="Top" Width="158" Height="26" SelectionChanged="ComboBox_SelectionChanged" SelectedIndex="0"/>
             <ComboBox x:Name="interval_cmbx" Grid.Column="2" HorizontalAlignment="Left" Margin="10.4,4.4,0,0" Grid.Row="2" VerticalAlignment="Top" Width="158" Height="26" SelectedIndex="0" SelectionChanged="interval_cmbx_SelectionChanged"/>
             <StackPanel VerticalAlignment="Top" Orientation="Horizontal" HorizontalAlignment="Center" Background="#FFB2B2B2" Margin="0,10,4,0" Grid.Row="3" Height="25" Width="201" Grid.Column="2" >
-                <RadioButton Content="Open" IsChecked="True" Width="56"/>
-                <RadioButton Content="Close" Width="51" />
-                <RadioButton Content="High" Width="48" />
-                <RadioButton Content="Low" Width="52" />
+                <RadioButton Content="Open" IsChecked="True" Width="56" Checked="SeriesTypeRadioButton_Checked"/>
+                <RadioButton Content="Close" Width="51" Checked="SeriesTypeRadioButton_Checked" />
+                <RadioButton Content="High" Width="48" Checked="SeriesTypeRadioButton_Checked" />
+                <RadioButton Content="Low" Width="52" Checked="SeriesTypeRadioButton_Checked" />
             </StackPanel>
             <Label Content="Time Period:" Grid.Column="1" HorizontalAlignment="Left" Grid.Row="4" VerticalAlignment="Top" RenderTransformOrigin="-0.105,0" Width="103" Height="35"/>
-            <TextBox x:Name="time_period_tb" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="10,4,0,0" Grid.Row="4" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="158"/>
+            <TextBox x:Name="time_period_tb" Grid.Column="2" HorizontalAlignment="Left" Height="23" Margin="10,4,0,0" Grid.Row="4" TextWrapping="Wrap" Text="10" VerticalAlignment="Top" Width="158" TextChanged="time_period_tb_TextChanged" />
             <Label Grid.Row="3" VerticalAlignment="Center" Height="26" Margin="51,5.6,205.2,9.801" Grid.ColumnSpan="3" Content="Series type:"/>
             <GridSplitter Grid.Column="2" HorizontalAlignment="Left" Height="296" Margin="24,38,0,0" Grid.Row="3" VerticalAlignment="Top" Width="4" RenderTransformOrigin="0.5,0.5" Grid.RowSpan="3" Background="#FF463535">
                 <GridSplitter.RenderTransform>
@@ -53,19 +53,19 @@
                 <fa:ImageAwesome x:Name="loadingChart2_img" Icon="Refresh" Spin="True" Height="48" Width="48" Grid.Column="2" Margin="543.4,262.6,-385.8,175.8" Grid.Row="5" />
                 <Label Content="Meta Data" Grid.Column="1" HorizontalAlignment="Left" Margin="83,120,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.605,0.538" Grid.ColumnSpan="2" Width="137" FontWeight="Bold" FontSize="14"/>
             <Label Grid.Row="5" Content="1. Symbol:" Grid.Column="1" HorizontalAlignment="Right" Margin="0,160,0,0" VerticalAlignment="Top" Width="103"/>
-            <Label Content="{Binding Path=Symbol}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,160,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.053,-0.385" Width="102" Height="26" FontWeight="Bold"/>
+            <Label x:Name="md_symbol" Content="{Binding Path=Symbol}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,160,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.053,-0.385" Width="102" Height="26" FontWeight="Bold"/>
             <Label Content="2. Indicator:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,203,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.5,-0.154" Width="103"/>
-            <Label Content="{Binding Path=Indicator}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,203,0,0" Grid.Row="5" VerticalAlignment="Top" Width="185" FontWeight="Bold" Height="26"/>
+            <Label x:Name="md_indicator" Content="{Binding Path=Indicator}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,203,0,0" Grid.Row="5" VerticalAlignment="Top" Width="185" FontWeight="Bold" Height="26"/>
             <Label Content="3. Last Refreshed:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,245,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="-0.237,0.231" Width="103"/>
-            <Label Content="{Binding Path=LastRefreshed}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,245,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
+            <Label x:Name="md_last_refreshed" Content="{Binding Path=LastRefreshed}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,245,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
             <Label Content="4. Interval: " Grid.Column="1" HorizontalAlignment="Left" Margin="0,287,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label Content="{Binding Path=Interval}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,287,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
+            <Label x:Name="md_interval" Content="{Binding Path=Interval}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,287,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold" Height="26"/>
             <Label Content="5. Time Period:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,327,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label Content="{Binding Path=TimePeriod}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,327,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.447,-0.231" Width="102" FontWeight="Bold" Height="26"/>
+            <Label x:Name="md_time_period" Content="{Binding Path=TimePeriod}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,327,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.447,-0.231" Width="102" FontWeight="Bold" Height="26"/>
             <Label Content="6. Series Type:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,367,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label Content="{Binding Path=SeriesType}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,367,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.579,-0.115" Width="102" FontWeight="Bold" Height="26"/>
+            <Label x:Name="md_series_type" Content="{Binding Path=SeriesType}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,367,0,0" Grid.Row="5" VerticalAlignment="Top" RenderTransformOrigin="0.579,-0.115" Width="102" FontWeight="Bold" Height="26"/>
             <Label Content="7. Time Zone:" Grid.Column="1" HorizontalAlignment="Left" Margin="0,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="103"/>
-            <Label Content="{Binding Path=TimeZone}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold"/>
+            <Label x:Name="md_time_zone" Content="{Binding Path=TimeZone}" Grid.Column="2" HorizontalAlignment="Left" Margin="10,408,0,0" Grid.Row="5" VerticalAlignment="Top" Width="102" FontWeight="Bold"/>
 
             <Button Content="Table View" Click="TableView_Click" Background="#FFA1D384" Grid.Column="1" HorizontalAlignment="Left" Margin="41,439,0,0" Grid.Row="5" VerticalAlignment="Top" Width="174" Height="30" Grid.ColumnSpan="2"/>
 
@@ -77,9 +77,9 @@
             <liveChart:CartesianChart Name="cartesianChart2" DockPanel.Dock="Top" Height="329"  />
             <StackPanel DockPanel.Dock="Bottom" Height="32" VerticalAlignment="Bottom" Orientation="Horizontal" HorizontalAlignment="Center" Width="622">
                 <Label Content="Fetch data from:" Width="139" FontWeight="Bold"></Label>
-                <RadioButton Content="All available" IsChecked="True" Width="166" Margin="0,7,0,0" />
-                <RadioButton Content="1 year" Width="180" Margin="0,7,0,0" />
-                <RadioButton Content="2 year" Width="127" Margin="0,7,0,0" />
+                <RadioButton Content="All available" IsChecked="True" Width="166" Margin="0,7,0,0" Checked="RadioButton_Checked" />
+                <RadioButton Content="1 year" Width="180" Margin="0,7,0,0" Checked="RadioButton_Checked" />
+                <RadioButton Content="2 year" Width="127" Margin="0,7,0,0" Checked="RadioButton_Checked" />
             </StackPanel>
         </DockPanel>
 
